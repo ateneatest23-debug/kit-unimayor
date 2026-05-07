@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit de Supervivencia Universitaria — UNIMAYOR</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --t:#1D9E75;--tl:#E1F5EE;--td:#085041;
+  --p:#7F77DD;--pl:#EEEDFE;--pd:#3C3489;
+  --a:#BA7517;--al:#FAEEDA;--ad:#633806;
+  --c:#D85A30;--cl:#FAECE7;--cd:#712B13;
+  --g50:#F7F6F2;--g100:#EEECEA;--g200:#D3D1C7;--gm:#888780;--gt:#2C2C2A;
+  --bg:#F5F4F0;--card:#FFFFFF;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --text:#1A1A18;--text2:#5F5E5A;--text3:#888780;
+  --radius:14px;--font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.app{max-width:600px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--gt);color:#fff;border-radius:24px;padding:10px 20px;font-size:13px;font-weight:500;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.slabel{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin:1.75rem 0 .75rem}
+.frase-card{background:var(--t);border-radius:20px;padding:1.5rem 1.75rem;color:#fff;margin-bottom:1rem;position:relative;overflow:hidden}
+.frase-card::before{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.06);right:-50px;top:-50px}
+.frase-card::after{content:'';position:absolute;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);right:40px;bottom:-30px}
+.frase-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.875rem}
+.frase-app{font-size:13px;font-weight:600;opacity:.8;position:relative}
+.frase-badge{background:rgba(255,255,255,0.18);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:500;position:relative}
+.frase-txt{font-size:15px;font-weight:500;line-height:1.5;position:relative;margin-bottom:.5rem;font-style:italic}
+.frase-autor{font-size:11px;opacity:.7;position:relative}
+.frase-fecha{font-size:11px;opacity:.6;position:relative;margin-top:.4rem}
+.xp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem}
+.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.xp-name{font-size:13px;font-weight:600;color:var(--text)}
+.xp-badge{font-size:10px;font-weight:600;background:var(--tl);color:var(--td);border-radius:20px;padding:3px 10px}
+.xp-track{height:7px;background:var(--g100);border-radius:4px;overflow:hidden;margin-bottom:.5rem}
+.xp-fill{height:100%;background:var(--t);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.xp-sub{display:flex;justify-content:space-between;font-size:11px;color:var(--text3)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.75rem .5rem;text-align:center}
+.stat-n{font-size:22px;font-weight:600;color:var(--text);font-family:var(--mono)}
+.stat-l{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.3}
+.stat-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:middle}
+.dim-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.dim-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;cursor:pointer;transition:border-color .15s}
+.dim-card:hover{border-color:var(--border2)}
+.dim-card.sel{border-width:2px}
+.dim-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:.6rem;font-size:20px}
+.dim-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.dim-sub{font-size:11px;color:var(--text3)}
+.dim-prog{height:3px;border-radius:2px;margin-top:.6rem;background:var(--g100);overflow:hidden}
+.dim-prog-fill{height:100%;border-radius:2px;transition:width .4s}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
+.panel-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:.5rem;letter-spacing:.3px}
+.panel-head h3{font-size:15px;font-weight:600;color:var(--text);line-height:1.35}
+.panel-head .why{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5}
+.evidence{background:var(--pl);border-left:3px solid var(--p);padding:10px 1.25rem;font-size:11px;color:var(--pd);line-height:1.55}
+.evidence b{font-weight:600}
+.steps{padding:.5rem 1.25rem}
+.step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start;cursor:pointer}
+.step:last-child{border-bottom:none}
+.step-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--g200);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .2s;background:transparent}
+.step-check.done{border-color:var(--t);background:var(--t)}
+.step-check.done::after{content:'';display:block;width:5px;height:9px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px)}
+.step-body{flex:1}
+.step-text{font-size:13px;color:var(--text);line-height:1.45;transition:color .2s}
+.step-text.done{color:var(--text3);text-decoration:line-through}
+.step-meta{display:flex;gap:6px;margin-top:3px;align-items:center}
+.step-time{font-size:10px;color:var(--text3)}
+.step-xp{font-size:10px;font-weight:600;color:var(--t);background:var(--tl);padding:1px 6px;border-radius:10px}
+.tip{background:var(--g50);padding:.75rem 1.25rem;font-size:12px;color:var(--text2);line-height:1.5;border-top:1px solid var(--border)}
+.tip b{color:var(--text);font-weight:600}
+.reto-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.875rem 1rem;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;transition:all .3s}
+.reto-card.done-reto{opacity:.6;background:var(--g50)}
+.reto-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.reto-body{flex:1}
+.reto-title{font-size:13px;font-weight:600;color:var(--text)}
+.reto-desc{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4}
+.reto-footer{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.reto-badge{font-size:10px;font-weight:600;border-radius:10px;padding:2px 8px}
+.reto-prog{font-size:11px;color:var(--text3);margin-left:auto;font-family:var(--mono)}
+.reto-status{font-size:11px;font-weight:600;padding:3px 10px;border-radius:8px}
+.reto-status.pendiente{background:var(--g100);color:var(--text3)}
+.reto-status.logrado{background:var(--tl);color:var(--td)}
+.weekly-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
+.weekly-hdr{padding:.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.weekly-hdr h4{font-size:13px;font-weight:600;color:var(--text)}
+.weekly-week{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.weekly-card table{width:100%;border-collapse:collapse;table-layout:fixed}
+.weekly-card th{background:var(--g50);padding:8px 4px;text-align:center;font-weight:600;color:var(--text3);border-bottom:1px solid var(--border);font-size:10px;letter-spacing:.3px}
+.weekly-card th:first-child{text-align:left;padding-left:1rem;width:28%}
+.weekly-card td{padding:7px 4px;text-align:center;border-bottom:1px solid var(--border);vertical-align:middle}
+.weekly-card td:first-child{text-align:left;padding-left:1rem;font-size:11px;font-weight:600;color:var(--text)}
+.weekly-card tr:last-child td{border-bottom:none}
+.wday{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border:1.5px solid var(--g200);background:transparent;color:transparent;cursor:pointer;transition:all .15s}
+.wday.ok{border-color:var(--t);background:var(--tl);color:var(--td)}
+.wday.hoy{border-color:var(--t);border-width:2px}
+.wday.futuro{opacity:.3;cursor:default}
+.reflect-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
+.reflect-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.reflect-head h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.reflect-head p{font-size:12px;color:var(--text2)}
+.reflect-hint{font-size:11px;color:var(--t);margin-top:3px;font-weight:600}
+.emo-grid{display:flex;flex-wrap:wrap;gap:6px;padding:.875rem 1.25rem;border-bottom:1px solid var(--border)}
+.emo-btn{font-size:12px;padding:5px 13px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;transition:all .15s;font-family:var(--font)}
+.emo-btn:hover{background:var(--g50)}
+.emo-btn.sel{background:var(--tl);color:var(--td);border-color:var(--t);font-weight:600}
+.reflect-write{padding:.875rem 1.25rem}
+.reflect-write textarea{width:100%;border:1px solid var(--border2);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text);background:var(--g50);resize:none;font-family:var(--font);line-height:1.5}
+.reflect-write textarea:focus{outline:none;border-color:var(--t)}
+.btn-save{margin-top:8px;font-size:12px;font-weight:600;padding:7px 16px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;font-family:var(--font);transition:background .15s}
+.btn-save:hover{background:var(--g50)}
+.saved-msg{display:none;padding:0 1.25rem .875rem;font-size:12px;color:var(--t);font-weight:600}
+.monthly-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
+.monthly-tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border)}
+.month-tab{padding:.6rem .25rem;text-align:center;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;border-right:1px solid var(--border);background:var(--g50);position:relative;transition:all .15s}
+.month-tab:last-child{border-right:none}
+.month-tab:hover{color:var(--text);background:var(--g100)}
+.month-tab.active{background:var(--card);color:var(--t);border-bottom:2px solid var(--t)}
+.month-tab.mes-hoy::after{content:'●';position:absolute;top:3px;right:5px;font-size:6px;color:var(--t)}
+.month-content{display:none}
+.month-content.active{display:block}
+.dim-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:.875rem 1.25rem}
+.dim-stat{background:var(--g50);border-radius:10px;padding:.75rem}
+.dim-stat-badge{font-size:10px;font-weight:600;border-radius:12px;padding:2px 8px;display:inline-block;margin-bottom:.4rem}
+.dim-stat-pct{font-size:24px;font-weight:600;color:var(--text);font-family:var(--mono);margin-bottom:4px}
+.dim-stat-bar{height:4px;background:var(--g200);border-radius:2px;overflow:hidden}
+.dim-stat-fill{height:100%;border-radius:2px}
+.global-row{margin:0 1.25rem .875rem;background:var(--g50);border-radius:10px;padding:1rem;text-align:center}
+.global-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500}
+.global-big{font-size:32px;font-weight:700;font-family:var(--mono)}
+.global-note{font-size:11px;color:var(--text3);margin-top:3px}
+.rec-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:8px}
+.rec-hdr{display:flex;align-items:center;gap:10px;padding:.875rem 1.25rem;cursor:pointer;transition:background .15s;user-select:none}
+.rec-hdr:hover{background:var(--g50)}
+.rec-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rec-hbody{flex:1}
+.rec-htitle{font-size:13px;font-weight:600;color:var(--text)}
+.rec-hsub{font-size:11px;color:var(--text3);margin-top:1px}
+.rec-chev{font-size:16px;color:var(--text3);transition:transform .2s;flex-shrink:0}
+.rec-chev.open{transform:rotate(90deg)}
+.rec-body{display:none;border-top:1px solid var(--border)}
+.rec-body.open{display:block}
+.rec-glabel{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);padding:7px 1.25rem 4px;background:var(--g50)}
+.rec-item{display:flex;align-items:flex-start;gap:10px;padding:9px 1.25rem;border-bottom:1px solid var(--border)}
+.rec-item:last-child{border-bottom:none}
+.rec-item-ico{font-size:14px;flex-shrink:0;width:22px;text-align:center;margin-top:1px}
+.rec-item-body{flex:1}
+.rec-item-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.4}
+.rec-item-sub{font-size:11px;color:var(--text3);margin-top:1px;line-height:1.35}
+.rec-item-val{font-size:12px;font-weight:500;color:var(--text2);margin-top:2px;word-break:break-all;font-family:var(--mono)}
+.rec-link-portal{display:flex;align-items:center;gap:10px;padding:9px 1.25rem;border-bottom:1px solid var(--border);text-decoration:none;transition:background .15s}
+.rec-link-portal:hover{background:var(--g50)}
+.rec-link-portal:last-child{border-bottom:none}
+.rp-ico{font-size:14px;flex-shrink:0;width:22px;text-align:center}
+.rp-body{flex:1}
+.rp-title{font-size:12px;font-weight:600;color:var(--t);line-height:1.4}
+.rp-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.rp-arrow{font-size:14px;color:var(--t)}
+@media(max-width:400px){.stats{grid-template-columns:repeat(2,1fr)}.monthly-tabs{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="toast" id="toast"></div>
+
+<div class="frase-card">
+  <div class="frase-top"><span class="frase-app">Kit de supervivencia universitaria</span><span class="frase-badge">UNIMAYOR</span></div>
+  <div class="frase-txt" id="frase-txt"></div>
+  <div class="frase-autor" id="frase-autor"></div>
+  <div class="frase-fecha" id="frase-fecha"></div>
+</div>
+
+<div class="xp-card">
+  <div class="xp-top"><span class="xp-name" id="xp-name">Universitario/a en formación</span><span class="xp-badge" id="xp-badge">Nivel 1</span></div>
+  <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+  <div class="xp-sub"><span id="xp-label">0 XP</span><span id="xp-next">Siguiente nivel: 100 XP</span></div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="st-dias">0</div><div class="stat-l"><span class="stat-dot" style="background:var(--t)"></span>Días activos</div></div>
+  <div class="stat"><div class="stat-n" id="st-pasos">0</div><div class="stat-l"><span class="stat-dot" style="background:var(--p)"></span>Pasos hoy</div></div>
+  <div class="stat"><div class="stat-n" id="st-racha">0</div><div class="stat-l"><span class="stat-dot" style="background:var(--a)"></span>Racha días</div></div>
+  <div class="stat"><div class="stat-n" id="st-xp">0</div><div class="stat-l"><span class="stat-dot" style="background:var(--c)"></span>XP total</div></div>
+</div>
+
+<div class="slabel">Tu rutina diaria</div>
+<div class="dim-grid">
+  <div class="dim-card sel" id="dc-f" onclick="showDim('f')" style="border-color:var(--t)"><div class="dim-icon" style="background:var(--tl)">🏃</div><div class="dim-title">Física</div><div class="dim-sub">Cuerpo activo · 5 min</div><div class="dim-prog"><div class="dim-prog-fill" id="dp-f" style="width:0%;background:var(--t)"></div></div></div>
+  <div class="dim-card" id="dc-a" onclick="showDim('a')"><div class="dim-icon" style="background:var(--pl)">📚</div><div class="dim-title">Académica</div><div class="dim-sub">Estudio efectivo · 5 min</div><div class="dim-prog"><div class="dim-prog-fill" id="dp-a" style="width:0%;background:var(--p)"></div></div></div>
+  <div class="dim-card" id="dc-p" onclick="showDim('p')"><div class="dim-icon" style="background:var(--al)">🧘</div><div class="dim-title">Personal</div><div class="dim-sub">Equilibrio interior · 3 min</div><div class="dim-prog"><div class="dim-prog-fill" id="dp-p" style="width:0%;background:var(--a)"></div></div></div>
+  <div class="dim-card" id="dc-s" onclick="showDim('s')"><div class="dim-icon" style="background:var(--cl)">🤝</div><div class="dim-title">Familiar-social</div><div class="dim-sub">Vínculos reales · 2 min</div><div class="dim-prog"><div class="dim-prog-fill" id="dp-s" style="width:0%;background:var(--c)"></div></div></div>
+</div>
+
+<div id="panel-f" class="panel">
+  <div class="panel-head"><span class="badge" style="background:var(--tl);color:var(--td)">RECETA FÍSICA · 5 MIN</span><h3>Activa tu cuerpo antes de que empiece la mente</h3><p class="why">Sin ropa deportiva, sin espacio extra. Hazla en tu cuarto, en el baño o en el pasillo.</p></div>
+  <div class="evidence"><b>Evidencia:</b> 10 min de movimiento mejoran la concentración hasta 2 horas (Harvard Medical School, 2021).</div>
+  <div class="steps">
+    <div class="step" onclick="toggleStep(this,'f',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Levántate sin snooze — pon el celular lejos de la cama la noche anterior</div><div class="step-meta"><span class="step-time">1 min</span><span class="step-xp">+15 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'f',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Estira cuello, hombros y espalda — rotaciones suaves, nada forzado</div><div class="step-meta"><span class="step-time">3 min</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'f',10)"><div class="step-check"></div><div class="step-body"><div class="step-text">Toma un vaso de agua antes de cualquier café o comida</div><div class="step-meta"><span class="step-time">1 min</span><span class="step-xp">+10 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'f',25)"><div class="step-check"></div><div class="step-body"><div class="step-text">5 minutos de caminata o sube las escaleras al llegar a UNIMAYOR</div><div class="step-meta"><span class="step-time">5 min</span><span class="step-xp">+25 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'f',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">En cada descanso de clase: párate y mueve las piernas 2 minutos</div><div class="step-meta"><span class="step-time">2 min</span><span class="step-xp">+15 XP</span></div></div></div>
+  </div>
+  <div class="tip"><b>Ingrediente secreto:</b> El sedentarismo de más de 2 horas genera fatiga mental. La pausa activa no interrumpe el estudio — lo potencia.</div>
+</div>
+
+<div id="panel-a" class="panel" style="display:none">
+  <div class="panel-head"><span class="badge" style="background:var(--pl);color:var(--pd)">RECETA ACADÉMICA · 5 MIN</span><h3>Estudia menos tiempo, aprende el doble</h3><p class="why">No es cuántas horas le metes sino cómo usas cada bloque.</p></div>
+  <div class="evidence"><b>Evidencia:</b> La técnica Pomodoro y la recuperación activa duplican la retención a largo plazo (Pooja Agarwal, 2021).</div>
+  <div class="steps">
+    <div class="step" onclick="toggleStep(this,'a',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Antes de estudiar: escribe en 1 oración qué quieres entender hoy</div><div class="step-meta"><span class="step-time">2 min</span><span class="step-xp">+15 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'a',25)"><div class="step-check"></div><div class="step-body"><div class="step-text">Trabaja en bloques de 25 min + 5 min de descanso (técnica Pomodoro)</div><div class="step-meta"><span class="step-time">30 min</span><span class="step-xp">+25 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'a',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Empieza siempre por la tarea más difícil — cuando tu energía está al máximo</div><div class="step-meta"><span class="step-time">—</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'a',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Al terminar: cierra el libro y escribe de memoria 3 cosas clave que aprendiste</div><div class="step-meta"><span class="step-time">5 min</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'a',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Usa tutorías, biblioteca o salas de estudio de UNIMAYOR esta semana</div><div class="step-meta"><span class="step-time">—</span><span class="step-xp">+15 XP</span></div></div></div>
+  </div>
+  <div class="tip"><b>Ingrediente secreto:</b> El cerebro consolida lo aprendido mientras duermes. Las noches previas a un parcial valen más que la madrugada del examen.</div>
+</div>
+
+<div id="panel-p" class="panel" style="display:none">
+  <div class="panel-head"><span class="badge" style="background:var(--al);color:var(--ad)">RECETA PERSONAL · 3 MIN</span><h3>Cuida tu mundo interior, que también se cansa</h3><p class="why">No necesitas tenerlo todo bajo control. Solo necesitas herramientas para cuando no lo tengas.</p></div>
+  <div class="evidence"><b>Evidencia:</b> La respiración 4-7-8 activa el sistema nervioso parasimpático en segundos (Dr. Andrew Weil, U. Arizona). El journaling reduce ansiedad en un 30% (APA, 2020).</div>
+  <div class="steps">
+    <div class="step" onclick="toggleStep(this,'p',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Check-in emocional: ¿Cómo me siento hoy? Una sola palabra, sin juzgar</div><div class="step-meta"><span class="step-time">1 min</span><span class="step-xp">+15 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'p',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Respiración 4-7-8: inhala 4 seg, retén 7, exhala 8 — repite 3 veces</div><div class="step-meta"><span class="step-time">2 min</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'p',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Escribe algo que salió bien hoy — por pequeño que sea</div><div class="step-meta"><span class="step-time">2 min</span><span class="step-xp">+15 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'p',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Identifica lo que está en tu control hoy — y suelta conscientemente lo que no</div><div class="step-meta"><span class="step-time">2 min</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'p',25)"><div class="step-check"></div><div class="step-body"><div class="step-text">Si algo te pesa mucho: agenda una cita con Psicología UNIMAYOR esta semana</div><div class="step-meta"><span class="step-time">5 min</span><span class="step-xp">+25 XP</span></div></div></div>
+  </div>
+  <div class="tip"><b>Ingrediente secreto:</b> Pedir ayuda es una habilidad, no una debilidad. El Área de Desarrollo Humano existe exactamente para acompañarte.</div>
+</div>
+
+<div id="panel-s" class="panel" style="display:none">
+  <div class="panel-head"><span class="badge" style="background:var(--cl);color:var(--cd)">RECETA SOCIAL · 2 MIN</span><h3>No navegues la universidad solo/a</h3><p class="why">Los vínculos que construyas en UNIMAYOR son tan importantes como las materias.</p></div>
+  <div class="evidence"><b>Evidencia:</b> Tener 1 relación de apoyo genuina reduce el riesgo de deserción en un 40% (Tinto, 1993). La conexión social es el predictor más fuerte de bienestar (Gallup, 2023).</div>
+  <div class="steps">
+    <div class="step" onclick="toggleStep(this,'s',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Habla con al menos 1 persona nueva esta semana — compañero, docente o administrativo</div><div class="step-meta"><span class="step-time">—</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'s',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Pon el celular en silencio durante las comidas o descansos con otras personas</div><div class="step-meta"><span class="step-time">—</span><span class="step-xp">+15 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'s',20)"><div class="step-check"></div><div class="step-body"><div class="step-text">Llama o escribe a alguien de tu familia — de forma personalizada, no masiva</div><div class="step-meta"><span class="step-time">5 min</span><span class="step-xp">+20 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'s',25)"><div class="step-check"></div><div class="step-body"><div class="step-text">Participa en al menos 1 actividad de Bienestar UNIMAYOR este período académico</div><div class="step-meta"><span class="step-time">—</span><span class="step-xp">+25 XP</span></div></div></div>
+    <div class="step" onclick="toggleStep(this,'s',15)"><div class="step-check"></div><div class="step-body"><div class="step-text">Si alguien del salón no está bien, pregunta cómo está — sin esperar a que lo diga</div><div class="step-meta"><span class="step-time">—</span><span class="step-xp">+15 XP</span></div></div></div>
+  </div>
+  <div class="tip"><b>Ingrediente secreto:</b> La soledad disfrazada de "soy independiente" es uno de los mayores obstáculos al bienestar universitario. Conectar no es perder tiempo.</div>
+</div>
+
+<div class="slabel">Retos de la semana — se marcan automáticamente</div>
+<div class="reto-card" id="reto-0"><div class="reto-icon" style="background:var(--tl)">🏆</div><div class="reto-body"><div class="reto-title">Semana activa</div><div class="reto-desc">Completa los 5 pasos físicos en un día</div><div class="reto-footer"><span class="reto-badge" style="background:var(--tl);color:var(--td)">+100 XP</span><span class="reto-badge" style="background:var(--g50);color:var(--gt)">Física</span><span class="reto-prog" id="rp-0">0/5</span><span class="reto-status pendiente" id="rs-0">Pendiente</span></div></div></div>
+<div class="reto-card" id="reto-1"><div class="reto-icon" style="background:var(--pl)">⏱</div><div class="reto-body"><div class="reto-title">Maestro Pomodoro</div><div class="reto-desc">Completa los 5 pasos académicos en un día</div><div class="reto-footer"><span class="reto-badge" style="background:var(--pl);color:var(--pd)">+80 XP</span><span class="reto-badge" style="background:var(--g50);color:var(--gt)">Académica</span><span class="reto-prog" id="rp-1">0/5</span><span class="reto-status pendiente" id="rs-1">Pendiente</span></div></div></div>
+<div class="reto-card" id="reto-2"><div class="reto-icon" style="background:var(--al)">🧠</div><div class="reto-body"><div class="reto-title">Diario de gratitud</div><div class="reto-desc">Completa los 5 pasos personales en un día</div><div class="reto-footer"><span class="reto-badge" style="background:var(--al);color:var(--ad)">+120 XP</span><span class="reto-badge" style="background:var(--g50);color:var(--gt)">Personal</span><span class="reto-prog" id="rp-2">0/5</span><span class="reto-status pendiente" id="rs-2">Pendiente</span></div></div></div>
+<div class="reto-card" id="reto-3"><div class="reto-icon" style="background:var(--cl)">🤝</div><div class="reto-body"><div class="reto-title">Conexión real</div><div class="reto-desc">Completa los 5 pasos sociales en un día</div><div class="reto-footer"><span class="reto-badge" style="background:var(--cl);color:var(--cd)">+90 XP</span><span class="reto-badge" style="background:var(--g50);color:var(--gt)">Social</span><span class="reto-prog" id="rp-3">0/5</span><span class="reto-status pendiente" id="rs-3">Pendiente</span></div></div></div>
+
+<div class="slabel">Control semanal</div>
+<div class="weekly-card">
+  <div class="weekly-hdr"><h4>Semana actual</h4><span class="weekly-week" id="week-label"></span></div>
+  <table><thead><tr><th>Dimensión</th><th id="th-0"></th><th id="th-1"></th><th id="th-2"></th><th id="th-3"></th><th id="th-4"></th></tr></thead><tbody id="weekly-tb"></tbody></table>
+</div>
+
+<div class="slabel">Reflexión del día</div>
+<div class="reflect-card">
+  <div class="reflect-head"><h3>¿Cómo te sentiste hoy?</h3><p>¿Qué emoción dominó tu día?</p><p class="reflect-hint">Puedes seleccionar hasta 2 emociones.</p></div>
+  <div class="emo-grid">
+    <button class="emo-btn" onclick="selEmo(this,'Tranquilo/a')">Tranquilo/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Motivado/a')">Motivado/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Ansioso/a')">Ansioso/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Cansado/a')">Cansado/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Feliz')">Feliz</button>
+    <button class="emo-btn" onclick="selEmo(this,'Frustrado/a')">Frustrado/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Estresado/a')">Estresado/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Contento/a')">Contento/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Triste')">Triste</button>
+    <button class="emo-btn" onclick="selEmo(this,'Confundido/a')">Confundido/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Agradecido/a')">Agradecido/a</button>
+    <button class="emo-btn" onclick="selEmo(this,'Abrumado/a')">Abrumado/a</button>
+  </div>
+  <div class="reflect-write">
+    <textarea rows="3" placeholder="¿Quieres agregar algo más sobre tu día? Escribe aquí..."></textarea>
+    <button class="btn-save" onclick="saveReflect(this)">Guardar reflexión</button>
+  </div>
+  <div class="saved-msg" id="saved-msg"></div>
+</div>
+
+<div class="slabel">Resumen mensual</div>
+<div class="monthly-card">
+  <div class="monthly-tabs" id="monthly-tabs">
+    <div class="month-tab" onclick="showMonth(0,this)" id="mtab-0">Febrero</div>
+    <div class="month-tab" onclick="showMonth(1,this)" id="mtab-1">Marzo</div>
+    <div class="month-tab" onclick="showMonth(2,this)" id="mtab-2">Abril</div>
+    <div class="month-tab" onclick="showMonth(3,this)" id="mtab-3">Mayo</div>
+  </div>
+  <div class="month-content" id="mc-0"></div>
+  <div class="month-content" id="mc-1"></div>
+  <div class="month-content" id="mc-2"></div>
+  <div class="month-content" id="mc-3"></div>
+</div>
+
+<div class="slabel">Recursos UNIMAYOR</div>
+
+<div class="rec-section">
+  <div class="rec-hdr" onclick="togRec(this)"><div class="rec-dot" style="background:var(--t)"></div><div class="rec-hbody"><div class="rec-htitle">Psicología — Desarrollo Humano</div><div class="rec-hsub">Atención individual · orientación · acompañamiento emocional</div></div><div class="rec-chev">›</div></div>
+  <div class="rec-body">
+    <div class="rec-glabel">Cómo agendar cita</div>
+    <div class="rec-item"><div class="rec-item-ico">📋</div><div class="rec-item-body"><div class="rec-item-title">Escribe al correo con tu nombre, programa y motivo de consulta</div><div class="rec-item-sub">El equipo te responde con horario disponible · Edif. Bicentenario</div></div></div>
+    <div class="rec-glabel">Correos</div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Apoyo psicológico estudiantil</div><div class="rec-item-val">psicologia_apoyo@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Angy Carolina Vásquez</div><div class="rec-item-val">psicologia@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Andrea Melissa Pineda Salazar · Apoyo académico</div><div class="rec-item-val">psicologiaacademico@unimayor.edu.co</div></div></div>
+    <div class="rec-glabel">Teléfono</div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Línea directa Psicología · Edif. Bicentenario</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2247</div></div></div>
+  </div>
+</div>
+
+<div class="rec-section">
+  <div class="rec-hdr" onclick="togRec(this)"><div class="rec-dot" style="background:var(--p)"></div><div class="rec-hbody"><div class="rec-htitle">Biblioteca y salas de estudio</div><div class="rec-hsub">Espacios silenciosos · computadores · bases de datos académicas</div></div><div class="rec-chev">›</div></div>
+  <div class="rec-body">
+    <div class="rec-glabel">Teléfonos</div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Alexander Salazar Tobar · Edif. Bicentenario</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2241</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Claudia Patricia Hernández · Karen Dayana Zambrano</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2242</div></div></div>
+    <div class="rec-glabel">Correo</div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Reserva de espacios · préstamos · recursos digitales</div><div class="rec-item-val">biblioteca@unimayor.edu.co</div></div></div>
+  </div>
+</div>
+
+<div class="rec-section">
+  <div class="rec-hdr" onclick="togRec(this)"><div class="rec-dot" style="background:var(--a)"></div><div class="rec-hbody"><div class="rec-htitle">Bienestar universitario</div><div class="rec-hsub">Deportes · cultura · salud · desarrollo humano</div></div><div class="rec-chev">›</div></div>
+  <div class="rec-body">
+    <div class="rec-glabel">Coordinación general</div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Jorge Leonardo Rojas Ruiz · Ext. 2229</div><div class="rec-item-val">bienestar@unimayor.edu.co</div></div></div>
+    <div class="rec-glabel">Áreas de contacto</div>
+    <div class="rec-item"><div class="rec-item-ico">🏥</div><div class="rec-item-body"><div class="rec-item-title">Área de Salud</div><div class="rec-item-val">salud@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">🤝</div><div class="rec-item-body"><div class="rec-item-title">Desarrollo Humano · becas y acompañamiento</div><div class="rec-item-val">dsocioeconomico@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Dirección Desarrollo Humano · Ext. 2208</div><div class="rec-item-val">desarrollohumano@unimayor.edu.co</div></div></div>
+  </div>
+</div>
+
+<div class="rec-section">
+  <div class="rec-hdr" onclick="togRec(this)"><div class="rec-dot" style="background:var(--c)"></div><div class="rec-hbody"><div class="rec-htitle">Monitorias y contacto docente</div><div class="rec-hsub">Salas de profesores por facultad · todos los programas</div></div><div class="rec-chev">›</div></div>
+  <div class="rec-body">
+    <div class="rec-glabel">Facultad de Educación · Casa Obando (Calle 3 # 6-52)</div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Sala de Profesores</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2249</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Secretaría Académica · Adriana Piedad Arboleda</div><div class="rec-item-val">sacademicofed@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Decanatura · María del Carmen Ibarra Torres</div><div class="rec-item-val">decafed@unimayor.edu.co</div></div></div>
+    <div class="rec-glabel">Facultad de Ingeniería · Edif. Bicentenario (Cra. 7 # 2-41)</div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Sala de Profesores</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2235</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Secretaría Académica · María Isabel García</div><div class="rec-item-val">sacademicofi@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Decanatura · Fredy Alonso Vidal Alegría</div><div class="rec-item-val">decing@unimayor.edu.co</div></div></div>
+    <div class="rec-glabel">Facultad de Ciencias Sociales · Edif. Bicentenario (Cra. 7 # 2-41)</div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Sala de Profesores</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2252</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Secretaría Académica · Carlos Fernando Arboleda</div><div class="rec-item-val">sacademicofcs@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Decanatura · Diana Alexandra Pacheco Torres</div><div class="rec-item-val">deccsa@unimayor.edu.co</div></div></div>
+    <div class="rec-glabel">Facultad de Arte y Diseño · Claustro Encarnación (Cra. 5 # 5-40)</div>
+    <div class="rec-item"><div class="rec-item-ico">📞</div><div class="rec-item-body"><div class="rec-item-title">Sala de Profesores</div><div class="rec-item-val">(+57 602) 827 4178 · Ext. 2206 / 2221</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Secretaría Académica · Gary Polanco</div><div class="rec-item-val">sacademicofa@unimayor.edu.co</div></div></div>
+    <div class="rec-item"><div class="rec-item-ico">✉️</div><div class="rec-item-body"><div class="rec-item-title">Decanatura · Laura Catalina Muñoz Pabón</div><div class="rec-item-val">decarte@unimayor.edu.co</div></div></div>
+  </div>
+</div>
+
+<div class="rec-section">
+  <div class="rec-hdr" onclick="togRec(this)"><div class="rec-dot" style="background:var(--gm)"></div><div class="rec-hbody"><div class="rec-htitle">Portal institucional UNIMAYOR</div><div class="rec-hsub">Toda la información oficial — acceso directo</div></div><div class="rec-chev">›</div></div>
+  <div class="rec-body">
+    <a class="rec-link-portal" href="https://unimayor.edu.co" target="_blank"><div class="rp-ico">🌐</div><div class="rp-body"><div class="rp-title">unimayor.edu.co — Sitio oficial</div><div class="rp-sub">Noticias, programas, calendario académico y servicios</div></div><div class="rp-arrow">›</div></a>
+    <a class="rec-link-portal" href="https://unimayor.edu.co/web/bienestar-universitario" target="_blank"><div class="rp-ico">🌐</div><div class="rp-body"><div class="rp-title">Bienestar universitario — información completa</div><div class="rp-sub">Programas, actividades y servicios disponibles</div></div><div class="rp-arrow">›</div></a>
+    <a class="rec-link-portal" href="http://190.5.199.27/directorio/web/" target="_blank"><div class="rp-ico">🌐</div><div class="rp-body"><div class="rp-title">Directorio telefónico completo — 125 contactos</div><div class="rp-sub">Busca cualquier docente, coordinador o dependencia</div></div><div class="rp-arrow">›</div></a>
+  </div>
+</div>
+
+</div>
+<script>
+var FRASES=[
+  {t:'"El éxito es la suma de pequeños esfuerzos repetidos día tras día."',a:'— Robert Collier'},
+  {t:'"La educación es el arma más poderosa para cambiar el mundo."',a:'— Nelson Mandela'},
+  {t:'"No cuentes los días, haz que los días cuenten."',a:'— Muhammad Ali'},
+  {t:'"El único modo de hacer un gran trabajo es amar lo que haces."',a:'— Steve Jobs'},
+  {t:'"Cada experto fue alguna vez un principiante."',a:'— Helen Hayes'},
+  {t:'"La disciplina es el puente entre metas y logros."',a:'— Jim Rohn'},
+  {t:'"No importa lo lento que vayas, siempre que no te detengas."',a:'— Confucio'},
+  {t:'"La perseverancia no es una carrera larga; son muchas carreras cortas una tras otra."',a:'— Walter Elliot'},
+  {t:'"Hoy es siempre el mejor día para aprender algo nuevo."',a:'— Anónimo'},
+  {t:'"La mente que se abre a una nueva idea jamás vuelve a su tamaño original."',a:'— Albert Einstein'},
+  {t:'"Las dificultades preparan a personas ordinarias para destinos extraordinarios."',a:'— C.S. Lewis'},
+  {t:'"Invierte en tu mente. Es el activo que siempre te acompaña."',a:'— Benjamin Franklin'},
+  {t:'"El aprendizaje nunca agota la mente."',a:'— Leonardo da Vinci'},
+  {t:'"El verdadero fracaso es no intentarlo."',a:'— Anónimo'},
+  {t:'"Cuida tu cuerpo. Es el único lugar donde tienes que vivir."',a:'— Jim Rohn'},
+  {t:'"Las conexiones que construyes hoy son las raíces de tu futuro."',a:'— Anónimo'},
+  {t:'"No esperes el momento perfecto. Toma el momento y hazlo perfecto."',a:'— Zoey Sayward'},
+  {t:'"El bienestar no es un destino, es una forma de viajar."',a:'— Anónimo'},
+  {t:'"Un pequeño paso cada día construye una gran distancia."',a:'— Anónimo'},
+  {t:'"La salud mental es tan importante como la salud física."',a:'— OMS'},
+  {t:'"Pedir ayuda es una señal de valentía, no de debilidad."',a:'— Anónimo'},
+  {t:'"Aprende como si fueras a vivir para siempre."',a:'— Mahatma Gandhi'},
+  {t:'"No tienes que ser perfecto. Solo tienes que empezar."',a:'— Anónimo'},
+  {t:'"Tu tiempo es limitado, no lo desperdicies viviendo la vida de otro."',a:'— Steve Jobs'},
+  {t:'"Los que se atreven a fallar grandemente pueden lograr grandes éxitos."',a:'— R.F. Kennedy'},
+  {t:'"Cree en ti mismo y todo lo demás vendrá solo."',a:'— Proverbio'},
+  {t:'"Lo que sabemos es una gota, lo que ignoramos es un océano."',a:'— Isaac Newton'},
+  {t:'"Eres capaz de cosas increíbles. Empieza hoy."',a:'— Anónimo'}
+];
+
+var now=new Date();
+var diasNombres=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+var mesesNombres=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var mesesKit=[1,2,3,4]; // feb=1,mar=2,abr=3,may=4
+
+var xp=0,dias=0,racha=0,pasosHoy=0;
+var dimState={f:{done:0,total:5},a:{done:0,total:5},p:{done:0,total:5},s:{done:0,total:5}};
+var retosDone=[false,false,false,false];
+var retoXp=[100,80,120,90];
+var retoDim=['f','a','p','s'];
+var selEmociones=[];
+var monthData=[{f:4,a:0,s:0,p:0},{f:0,a:0,s:0,p:0},{f:0,a:0,s:0,p:0},{f:0,a:0,s:0,p:0}];
+var levels=[
+  {name:'Universitario/a en formación',xp:0},
+  {name:'Explorador/a del bienestar',xp:100},
+  {name:'Practicante comprometido/a',xp:250},
+  {name:'Agente de cambio',xp:500},
+  {name:'Referente universitario/a',xp:900}
+];
+
+function initFrase(){
+  var d=now.getDate();
+  var idx=d%FRASES.length;
+  document.getElementById('frase-txt').textContent=FRASES[idx].t;
+  document.getElementById('frase-autor').textContent=FRASES[idx].a;
+  document.getElementById('frase-fecha').textContent=
+    diasNombres[now.getDay()]+', '+now.getDate()+' de '+mesesNombres[now.getMonth()]+' de '+now.getFullYear();
+}
+
+function initWeekly(){
+  var dow=now.getDay();
+  var diff=dow===0?-6:1-dow;
+  var monday=new Date(now);
+  monday.setDate(now.getDate()+diff);
+  var dayNames=['Lun','Mar','Mié','Jue','Vie'];
+  var days=[];
+  for(var i=0;i<5;i++){var d=new Date(monday);d.setDate(monday.getDate()+i);days.push(d);}
+  for(var i=0;i<5;i++){
+    document.getElementById('th-'+i).textContent=dayNames[i]+' '+days[i].getDate();
+  }
+  document.getElementById('week-label').textContent=
+    days[0].getDate()+'/'+(days[0].getMonth()+1)+' – '+days[4].getDate()+'/'+(days[4].getMonth()+1);
+  var configs=[{k:'f',label:'Física',color:'var(--t)'},{k:'a',label:'Académica',color:'var(--p)'},{k:'p',label:'Personal',color:'var(--a)'},{k:'s',label:'Social',color:'var(--c)'}];
+  var tb=document.getElementById('weekly-tb');
+  configs.forEach(function(cfg){
+    var tr=document.createElement('tr');
+    var td0=document.createElement('td');
+    td0.innerHTML='<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:'+cfg.color+';margin-right:5px;vertical-align:middle"></span>'+cfg.label;
+    tr.appendChild(td0);
+    days.forEach(function(day){
+      var td=document.createElement('td');
+      var btn=document.createElement('button');
+      btn.className='wday';
+      var isToday=day.toDateString()===now.toDateString();
+      var isFuture=day>now&&!isToday;
+      if(isToday)btn.classList.add('hoy');
+      if(isFuture){btn.classList.add('futuro');btn.disabled=true;}
+      btn.onclick=function(e){
+        e.stopPropagation();
+        if(btn.classList.contains('ok')){btn.classList.remove('ok');btn.textContent='';xp=Math.max(0,xp-10);updateStats();updateXp();}
+        else{btn.classList.add('ok');btn.textContent='✓';xp+=10;updateStats();updateXp();showToast('+10 XP');}
+      };
+      td.appendChild(btn);tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+}
+
+function renderMonth(idx){
+  var d=monthData[idx];
+  var g=Math.round((d.f+d.a+d.s+d.p)/4);
+  var col=g>=70?'var(--t)':g>=40?'var(--a)':g>0?'var(--c)':'var(--gm)';
+  var note=g>=70?'¡Excelente adherencia — sigue así!':g>=40?'Vas bien — sigue sumando cada día':g>0?'Cada paso cuenta — sigue adelante':'Completa pasos diarios para ver tu progreso';
+  document.getElementById('mc-'+idx).innerHTML=
+    '<div class="dim-stats">'+
+    '<div class="dim-stat"><span class="dim-stat-badge" style="background:var(--tl);color:var(--td)">Física</span><div class="dim-stat-pct">'+d.f+'%</div><div class="dim-stat-bar"><div class="dim-stat-fill" style="width:'+d.f+'%;background:var(--t)"></div></div></div>'+
+    '<div class="dim-stat"><span class="dim-stat-badge" style="background:var(--pl);color:var(--pd)">Académica</span><div class="dim-stat-pct">'+d.a+'%</div><div class="dim-stat-bar"><div class="dim-stat-fill" style="width:'+d.a+'%;background:var(--p)"></div></div></div>'+
+    '<div class="dim-stat"><span class="dim-stat-badge" style="background:var(--cl);color:var(--cd)">Familiar-Social</span><div class="dim-stat-pct">'+d.s+'%</div><div class="dim-stat-bar"><div class="dim-stat-fill" style="width:'+d.s+'%;background:var(--c)"></div></div></div>'+
+    '<div class="dim-stat"><span class="dim-stat-badge" style="background:var(--al);color:var(--ad)">Personal</span><div class="dim-stat-pct">'+d.p+'%</div><div class="dim-stat-bar"><div class="dim-stat-fill" style="width:'+d.p+'%;background:var(--a)"></div></div></div>'+
+    '</div><div class="global-row"><div class="global-lbl">Adherencia global del mes</div><div class="global-big" style="color:'+col+'">'+g+'%</div><div class="global-note">'+note+'</div></div>';
+}
+
+function initMonthly(){
+  var mesActual=now.getMonth();
+  var activo=0;
+  mesesKit.forEach(function(m,i){
+    document.getElementById('mtab-'+i).textContent=mesesNombres[m];
+    if(m===mesActual){document.getElementById('mtab-'+i).classList.add('mes-hoy');activo=i;}
+    renderMonth(i);
+  });
+  document.getElementById('mc-'+activo).classList.add('active');
+  document.getElementById('mtab-'+activo).classList.add('active');
+}
+
+function showMonth(idx,tab){
+  document.querySelectorAll('.month-content').forEach(function(c){c.classList.remove('active')});
+  document.querySelectorAll('.month-tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('mc-'+idx).classList.add('active');
+  tab.classList.add('active');
+}
+
+function showDim(d){
+  ['f','a','p','s'].forEach(function(k){
+    document.getElementById('panel-'+k).style.display='none';
+    var dc=document.getElementById('dc-'+k);dc.classList.remove('sel');dc.style.borderColor='';dc.style.borderWidth='';
+  });
+  document.getElementById('panel-'+d).style.display='block';
+  var dc=document.getElementById('dc-'+d);dc.classList.add('sel');
+  var cols={f:'var(--t)',a:'var(--p)',p:'var(--a)',s:'var(--c)'};
+  dc.style.borderColor=cols[d];dc.style.borderWidth='2px';
+}
+
+function toggleStep(el,dim,pts){
+  var chk=el.querySelector('.step-check');
+  var txt=el.querySelector('.step-text');
+  var done=chk.classList.contains('done');
+  if(!done){
+    chk.classList.add('done');txt.classList.add('done');
+    xp+=pts;dimState[dim].done++;pasosHoy++;
+    if(pasosHoy===1){racha++;dias++;}
+    showToast('+'+pts+' XP');
+  } else {
+    chk.classList.remove('done');txt.classList.remove('done');
+    xp=Math.max(0,xp-pts);
+    dimState[dim].done=Math.max(0,dimState[dim].done-1);
+    pasosHoy=Math.max(0,pasosHoy-1);
+  }
+  document.getElementById('dp-'+dim).style.width=Math.round((dimState[dim].done/dimState[dim].total)*100)+'%';
+  checkRetos();updateStats();updateXp();
+}
+
+function checkRetos(){
+  [0,1,2,3].forEach(function(i){
+    var dim=retoDim[i];
+    var done=dimState[dim].done;
+    document.getElementById('rp-'+i).textContent=done+'/5';
+    if(done>=5&&!retosDone[i]){
+      retosDone[i]=true;xp+=retoXp[i];
+      document.getElementById('reto-'+i).classList.add('done-reto');
+      document.getElementById('rs-'+i).textContent='¡Logrado!';
+      document.getElementById('rs-'+i).className='reto-status logrado';
+      showToast('+'+retoXp[i]+' XP — ¡Reto completado!');
+      updateStats();updateXp();
+    }
+  });
+}
+
+function updateStats(){
+  document.getElementById('st-dias').textContent=dias;
+  document.getElementById('st-pasos').textContent=pasosHoy;
+  document.getElementById('st-racha').textContent=racha;
+  document.getElementById('st-xp').textContent=xp;
+}
+
+function updateXp(){
+  var lv=0;
+  for(var i=levels.length-1;i>=0;i--){if(xp>=levels[i].xp){lv=i;break;}}
+  var prev=levels[lv].xp;
+  var next=lv<levels.length-1?levels[lv+1].xp:prev;
+  var pct=lv<levels.length-1?Math.round(((xp-prev)/(next-prev))*100):100;
+  document.getElementById('xp-fill').style.width=pct+'%';
+  document.getElementById('xp-name').textContent=levels[lv].name;
+  document.getElementById('xp-badge').textContent='Nivel '+(lv+1);
+  document.getElementById('xp-label').textContent=xp+' XP';
+  document.getElementById('xp-next').textContent=lv<levels.length-1?'Siguiente nivel: '+next+' XP':'¡Nivel máximo!';
+}
+
+function selEmo(btn,emo){
+  var idx=selEmociones.indexOf(emo);
+  if(idx>-1){selEmociones.splice(idx,1);btn.classList.remove('sel');}
+  else{
+    if(selEmociones.length>=2){showToast('Máximo 2 emociones');return;}
+    selEmociones.push(emo);btn.classList.add('sel');
+  }
+}
+
+function saveReflect(btnEl){
+  var ta=btnEl.previousElementSibling;
+  var saved=document.getElementById('saved-msg');
+  if(selEmociones.length>0||ta.value.trim()){
+    saved.style.display='block';
+    saved.textContent=selEmociones.length>0?'✓ Registrado: '+selEmociones.join(' + '):'✓ Reflexión guardada';
+    showToast('Reflexión guardada');
+  }
+}
+
+function togRec(hdr){
+  var body=hdr.nextElementSibling;
+  var chev=hdr.querySelector('.rec-chev');
+  body.classList.toggle('open',!body.classList.contains('open'));
+  chev.classList.toggle('open',!chev.classList.contains('open'));
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2200);
+}
+
+initFrase();
+initWeekly();
+initMonthly();
+updateXp();
+</script>
+</body>
+</html>
